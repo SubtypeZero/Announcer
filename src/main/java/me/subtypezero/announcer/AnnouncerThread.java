@@ -1,4 +1,4 @@
-package me.declanmc96.Announcer;
+package me.subtypezero.announcer;
  
 import java.util.Random;
  
