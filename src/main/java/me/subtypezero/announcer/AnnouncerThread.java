@@ -14,12 +14,12 @@ public class AnnouncerThread extends Thread {
 	public void run() {
 		if (this.plugin.isAnnouncerEnabled()) {
 			if (this.plugin.isRandom()) {
-				this.lastAnnouncement = Math.abs(this.randomGenerator.nextInt() % this.plugin.numberOfAnnouncements());
-			} else if (++this.lastAnnouncement >= this.plugin.numberOfAnnouncements()) {
+				this.lastAnnouncement = Math.abs(this.randomGenerator.nextInt() % this.plugin.getAnnouncementCount());
+			} else if (++this.lastAnnouncement >= this.plugin.getAnnouncementCount()) {
 				this.lastAnnouncement = 0;
 			}
 
-			if (this.lastAnnouncement < this.plugin.numberOfAnnouncements()) {
+			if (this.lastAnnouncement < this.plugin.getAnnouncementCount()) {
 				this.plugin.announce(this.lastAnnouncement + 1);
 			}
 		}

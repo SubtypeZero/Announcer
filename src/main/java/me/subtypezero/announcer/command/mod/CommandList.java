@@ -44,14 +44,14 @@ public class CommandList implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		if (PLUGIN.numberOfAnnouncements() < 1) {
+		if (PLUGIN.getAnnouncementCount() < 1) {
 			src.sendMessage(Text.of(TextColors.RED, "There are currently no announcements!"));
 			return CommandResult.empty();
 		}
 
 		List<Text> text = new ArrayList<>();
 
-		for (int i = 1; i < PLUGIN.numberOfAnnouncements(); i++) {
+		for (int i = 1; i < PLUGIN.getAnnouncementCount(); i++) {
 			text.add(Text.of(TextColors.AQUA, i, TextColors.GRAY, " - ", ChatColorHelper.replaceColorCodes(PLUGIN.getAnnouncement(i))));
 		}
 

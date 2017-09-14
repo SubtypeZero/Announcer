@@ -2,16 +2,19 @@ package me.subtypezero.announcer;
 
 import com.google.inject.Inject;
 import me.subtypezero.announcer.command.CommandAnnounce;
+import me.subtypezero.announcer.config.ConfigManager;
+import me.subtypezero.announcer.config.type.GlobalConfig;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.config.ConfigDir;
-import org.spongepowered.api.config.ConfigManager;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GameConstructionEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
@@ -19,9 +22,9 @@ import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Plugin(id = PluginInfo.ID, name = PluginInfo.NAME, version = PluginInfo.VERSION, description = PluginInfo.DESCRIPTION, authors = PluginInfo.AUTHORS)
 public class Announcer {
@@ -42,11 +45,11 @@ public class Announcer {
 	@DefaultConfig(sharedRoot = false)
 	private ConfigurationLoader<CommentedConfigurationNode> configManager;
 	private ConfigManager pluginConfigManager;
-	// private GlobalConfig defaultConfig;
+	private GlobalConfig defaultConfig;
 
 	private List<String> messages;
 	private String prefix;
-	private long interval;
+	private int interval;
 	private boolean enabled;
 	private boolean random;
 	private AnnouncerThread thread;
@@ -71,12 +74,36 @@ public class Announcer {
 		registerCommands();
 	}
 
+	@Listener
+	public void onReload(GameReloadEvent event) {
+		reloadConfiguration();
+	}
+
+	public void reloadConfiguration() {
+		// Load Plugin Config
+		pluginConfigManager.load();
+		// Reload Tasks
+		Sponge.getScheduler().getTasksByName("announcer.message.broadcast").forEach(Task::cancel);
+		registerTasks();
+		// Reload Commands
+		Sponge.getCommandManager().getOwnedBy(this).forEach(Sponge.getCommandManager()::removeMapping);
+		CommandAnnounce.clearSubCommands();
+		registerCommands();
+	}
+
 	private void registerCommands() {
 		CommandAnnounce.register();
 	}
 
-	private void createTask() {
-		task = Task.builder().execute(this.thread).intervalTicks(this.interval * 20L).async().submit(this);
+	private void registerTasks() {
+		if (getConfig().getAnnouncementConfig().isEnabled()) {
+			Sponge.getScheduler().createTaskBuilder()
+					.name("announcer.message.broadcast")
+					.execute(this.thread)
+					.interval(getConfig().getAnnouncementConfig().getInterval(), TimeUnit.SECONDS)
+					.async()
+					.submit(this);
+		}
 	}
 
 	public void announce() {
@@ -101,67 +128,53 @@ public class Announcer {
 			}
 	}
 
-	public void saveConfiguration() {
-		getConfig().set("announcement.messages", this.messages);
-		getConfig().set("announcement.interval", Long.valueOf(this.interval));
-		getConfig().set("announcement.prefix", this.prefix);
-		getConfig().set("announcement.enabled", Boolean.valueOf(this.enabled));
-		getConfig().set("announcement.random", Boolean.valueOf(this.random));
-		saveConfig();
-	}
-
-	public void reloadConfiguration() {
-		reloadConfig();
-		this.prefix = getConfig().getString("announcement.prefix", "&c[Announcement] ");
-		this.messages = getConfig().getStringList("announcement.messages");
-		this.interval = getConfig().getInt("announcement.interval", 1000);
-		this.enabled = getConfig().getBoolean("announcement.enabled", true);
-		this.random = getConfig().getBoolean("announcement.random", false);
-	}
-
 	public String getPrefix() {
 		return this.prefix;
 	}
 
 	public void setPrefix(String prefix) {
 		this.prefix = prefix;
-		saveConfig();
+		getConfig().getAnnouncementConfig().setPrefix(prefix);
+		getConfigManager().save();
 	}
 
 	public long getInterval() {
 		return this.interval;
 	}
 
-	public void setInterval(long interval) {
+	public void setInterval(int interval) {
 		this.interval = interval;
-		saveConfiguration();
+		getConfig().getAnnouncementConfig().setInterval(interval);
+		getConfigManager().save();
 
 		// Restart the task
 		task.cancel();
-		createTask();
+		registerTasks();
 	}
 
 	public void addAnnouncement(String message) {
 		this.messages.add(message);
-		saveConfiguration();
+		getConfig().getAnnouncementConfig().setMessages(messages);
+		getConfigManager().save();
 	}
 
 	public String getAnnouncement(int index) {
 		return this.messages.get(index - 1);
 	}
 
-	public int numberOfAnnouncements() {
+	public int getAnnouncementCount() {
 		return this.messages.size();
 	}
 
 	public void removeAnnouncements() {
 		this.messages.clear();
-		saveConfiguration();
+		getConfigManager().save();
 	}
 
 	public void removeAnnouncement(int index) {
 		this.messages.remove(index - 1);
-		saveConfiguration();
+		getConfig().getAnnouncementConfig().setMessages(messages);
+		getConfigManager().save();
 	}
 
 	public boolean isAnnouncerEnabled() {
@@ -170,7 +183,8 @@ public class Announcer {
 
 	public void setAnnouncerEnabled(boolean enabled) {
 		this.enabled = enabled;
-		saveConfiguration();
+		getConfig().getAnnouncementConfig().setEnabled(this.enabled);
+		getConfigManager().save();
 	}
 
 	public boolean isRandom() {
@@ -179,7 +193,8 @@ public class Announcer {
 
 	public void setRandom(boolean random) {
 		this.random = random;
-		saveConfiguration();
+		getConfig().getAnnouncementConfig().setRandom(this.random);
+		getConfigManager().save();
 	}
 
 	public static Announcer getInstance() {
@@ -192,5 +207,13 @@ public class Announcer {
 
 	public Game getGame() {
 		return game;
+	}
+
+	public GlobalConfig getConfig() {
+		return this.defaultConfig;
+	}
+
+	public ConfigManager getConfigManager() {
+		return this.pluginConfigManager;
 	}
 }
