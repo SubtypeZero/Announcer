@@ -1,0 +1,14 @@
+[
+    {
+        "modid": "announcer",
+        "name": "Announcer",
+        "version": "1.7.1",
+        "description": "Announcer is an automatic broadcast plugin for Sponge servers.",
+        "authorList": [
+            "SubtypeZero, DeckerzMC, ThunderGemios10"
+        ],
+        "requiredMods": [
+            "spongeapi@5.1.0"
+        ]
+    }
+]
