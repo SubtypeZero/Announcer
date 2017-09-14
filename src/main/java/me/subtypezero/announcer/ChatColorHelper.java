@@ -1,15 +1,11 @@
 package me.subtypezero.announcer;
- 
-import org.bukkit.ChatColor;
- 
-public class ChatColorHelper
-{
-  public static String replaceColorCodes(String message)
-  {
-    for (ChatColor color : ChatColor.values()) {
-      message = message.replaceAll(String.format("&%c", new Object[] { Character.valueOf(color.getChar()) }), color.toString());
-    }
- 
-    return message;
-  }
+
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.serializer.TextSerializers;
+
+public class ChatColorHelper {
+
+	public static Text replaceColorCodes(String message) {
+		return TextSerializers.FORMATTING_CODE.deserialize(message);
+	}
 }
