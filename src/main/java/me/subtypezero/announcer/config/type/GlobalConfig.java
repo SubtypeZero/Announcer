@@ -6,11 +6,7 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 
 @ConfigSerializable
 public class GlobalConfig {
-	@Setting(value = "Config-Version", comment =
-			"#######################################################\n" +
-			"##                   Created By                      ##\n" +
-			"##       SubtypeZero, Deckerz, ThunderGemios10       ##\n" +
-			"#######################################################")
+	@Setting(value = "Config-Version")
 	private int version;
 	@Setting(value = "Announcement")
 	private AnnouncementConfig announcementConfig;

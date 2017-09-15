@@ -31,7 +31,6 @@ import java.util.concurrent.TimeUnit;
 @Plugin(id = PluginInfo.ID, name = PluginInfo.NAME, version = PluginInfo.VERSION, description = PluginInfo.DESCRIPTION, authors = PluginInfo.AUTHORS)
 public class Announcer {
 	private static Announcer instance;
-	private static Cause genericCause;
 
 	@Inject
 	private Logger logger;
@@ -50,8 +49,6 @@ public class Announcer {
 	private GlobalConfig defaultConfig;
 	private AnnouncementConfig config;
 
-	private Task task;
-
 	@Listener
 	public void onGameConstruction(GameConstructionEvent event) {
 		instance = this;
@@ -68,7 +65,6 @@ public class Announcer {
 	@Listener
 	public void onServerStart(GameStartedServerEvent event) {
 		instance = this;
-		genericCause = Cause.builder().named("plugin", this).build();
 		registerCommands();
 	}
 
@@ -81,7 +77,7 @@ public class Announcer {
 		// Load Plugin Config
 		configManager.load();
 		// Reload Tasks
-		Sponge.getScheduler().getTasksByName("announcer.message.broadcast").forEach(Task::cancel);
+		cancelTasks();
 		registerTasks();
 		// Reload Commands
 		Sponge.getCommandManager().getOwnedBy(this).forEach(Sponge.getCommandManager()::removeMapping);
@@ -95,13 +91,17 @@ public class Announcer {
 
 	private void registerTasks() {
 		if (getConfig().getAnnouncementConfig().isEnabled()) {
-			task = Task.builder()
+			Sponge.getScheduler().createTaskBuilder()
 					.name("announcer.message.broadcast")
 					.execute(new AnnouncerThread(this))
 					.interval(getConfig().getAnnouncementConfig().getInterval(), TimeUnit.SECONDS)
 					.async()
 					.submit(this);
 		}
+	}
+
+	private void cancelTasks() {
+		Sponge.getScheduler().getTasksByName("announcer.message.broadcast").forEach(Task::cancel);
 	}
 
 	public void announce(int index) {
@@ -143,7 +143,7 @@ public class Announcer {
 		getConfigLoader().save();
 
 		// Restart the task
-		task.cancel();
+		cancelTasks();
 		registerTasks();
 	}
 
@@ -180,8 +180,10 @@ public class Announcer {
 
 	public void setAnnouncerEnabled(boolean enabled) {
 		if (enabled != config.isEnabled()) {
-			task.cancel();
-			registerTasks();
+			cancelTasks();
+			if (enabled) {
+				registerTasks();
+			}
 			config.setEnabled(enabled);
 			getConfigLoader().save();
 		}
