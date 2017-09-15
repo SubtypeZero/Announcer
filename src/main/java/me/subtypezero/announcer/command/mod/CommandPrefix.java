@@ -39,7 +39,7 @@ public class CommandPrefix implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		String prefix = args.<String>getOne("prefix").get();
+		String prefix = args.<String>getOne("value").get();
 		PLUGIN.setPrefix(prefix);
 		src.sendMessage(Text.of(TextColors.GREEN, "Announcement prefix changed successfully!"));
 		return CommandResult.success();

@@ -6,6 +6,7 @@ import me.subtypezero.announcer.config.ConfigManager;
 import me.subtypezero.announcer.config.type.AnnouncementConfig;
 import me.subtypezero.announcer.config.type.GlobalConfig;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
@@ -56,6 +57,7 @@ public class Announcer {
 
 	@Listener
 	public void onPreInitialization(GamePreInitializationEvent event) {
+		configLoader = HoconConfigurationLoader.builder().setPath(configDir).build();
 		defaultConfig = new GlobalConfig();
 		configManager = new ConfigManager(configLoader);
 		config = defaultConfig.getAnnouncementConfig();
@@ -94,7 +96,8 @@ public class Announcer {
 			Sponge.getScheduler().createTaskBuilder()
 					.name("announcer.message.broadcast")
 					.execute(new AnnouncerThread(this))
-					.interval(getConfig().getAnnouncementConfig().getInterval(), TimeUnit.SECONDS)
+					.delay(config.getInterval(), TimeUnit.SECONDS)
+					.interval(config.getInterval(), TimeUnit.SECONDS)
 					.async()
 					.submit(this);
 		}
@@ -171,6 +174,7 @@ public class Announcer {
 		List<String> messages = config.getMessages();
 		messages.remove(index - 1);
 		config.setMessages(messages);
+		configManager.save();
 		getConfigLoader().save();
 	}
 
