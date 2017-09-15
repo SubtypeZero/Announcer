@@ -17,7 +17,7 @@ public class Permissions {
 	public static final String COMMAND_MODE = "announcer.mode"; // Allows users to toggle the announcement mode (random or sequential)
 
 	// Admin Permissions
-	public static final String ADMIN_PERM = "announcer.admin"; // Allows users to use all admin commands
+	public static final String ADMIN_PERM = "announcer.admin"; // Allows users to use all admin and mod permissions
 	public static final String COMMAND_ENABLE = "announcer.enable"; // Allows users to enable and disable announcements
 	public static final String COMMAND_RELOAD = "announcer.reload"; // Allows users to reload the plugin configuration
 	public static final String COMMAND_VERSION = "announcer.version"; // Allows users to view plugin version information
