@@ -84,8 +84,8 @@ public class CommandAnnounce implements CommandExecutor {
 
 		if (hasMod || src.hasPermission(Permissions.COMMAND_ADD)) {
 			helpText.add(Text.of(
-					TextColors.AQUA, Text.builder("acc add").onClick(TextActions.suggestCommand("/acc add <message>")),
-					TextColors.GOLD, " <message>",
+					TextColors.GOLD, Text.builder("acc add").onClick(TextActions.suggestCommand("/acc add <message>")),
+					TextColors.YELLOW, " <message>",
 					TextColors.DARK_GRAY, " - ",
 					TextColors.DARK_GREEN, CommandAdd.HELP_TEXT
 			));
@@ -95,8 +95,8 @@ public class CommandAnnounce implements CommandExecutor {
 
 		if (hasMod || src.hasPermission(Permissions.COMMAND_REMOVE)) {
 			helpText.add(Text.of(
-					TextColors.AQUA, Text.builder("acc remove").onClick(TextActions.suggestCommand("/acc remove <index>")),
-					TextColors.GOLD, " <index>",
+					TextColors.GOLD, Text.builder("acc remove").onClick(TextActions.suggestCommand("/acc remove <index>")),
+					TextColors.YELLOW, " <index>",
 					TextColors.DARK_GRAY, " - ",
 					TextColors.DARK_GREEN, CommandRemove.HELP_TEXT
 			));
@@ -105,8 +105,8 @@ public class CommandAnnounce implements CommandExecutor {
 
 		if (hasMod || src.hasPermission(Permissions.COMMAND_BROADCAST)) {
 			helpText.add(Text.of(
-					TextColors.AQUA, Text.builder("acc broadcast").onClick(TextActions.suggestCommand("/acc broadcast <index>")),
-					TextColors.GOLD, " <index>",
+					TextColors.GOLD, Text.builder("acc broadcast").onClick(TextActions.suggestCommand("/acc broadcast <index>")),
+					TextColors.YELLOW, " <index>",
 					TextColors.DARK_GRAY, " - ",
 					TextColors.DARK_GREEN, CommandBroadcast.HELP_TEXT
 			));
@@ -115,8 +115,8 @@ public class CommandAnnounce implements CommandExecutor {
 
 		if (hasMod || src.hasPermission(Permissions.COMMAND_SAY)) {
 			helpText.add(Text.of(
-					TextColors.AQUA, Text.builder("acc say").onClick(TextActions.suggestCommand("/acc say <message>")),
-					TextColors.GOLD, " <message>",
+					TextColors.GOLD, Text.builder("acc say").onClick(TextActions.suggestCommand("/acc say <message>")),
+					TextColors.YELLOW, " <message>",
 					TextColors.DARK_GRAY, " - ",
 					TextColors.DARK_GREEN, CommandSay.HELP_TEXT
 			));
@@ -125,8 +125,8 @@ public class CommandAnnounce implements CommandExecutor {
 
 		if (hasMod || src.hasPermission(Permissions.COMMAND_INTERVAL)) {
 			helpText.add(Text.of(
-					TextColors.AQUA, Text.builder("acc interval").onClick(TextActions.suggestCommand("/acc interval <seconds>")),
-					TextColors.GOLD, " <seconds>",
+					TextColors.GOLD, Text.builder("acc interval").onClick(TextActions.suggestCommand("/acc interval <seconds>")),
+					TextColors.YELLOW, " <seconds>",
 					TextColors.DARK_GRAY, " - ",
 					TextColors.DARK_GREEN, CommandInterval.HELP_TEXT
 			));
@@ -135,7 +135,7 @@ public class CommandAnnounce implements CommandExecutor {
 
 		if (hasMod || src.hasPermission(Permissions.COMMAND_LIST)) {
 			helpText.add(Text.of(
-					TextColors.AQUA, Text.builder("acc list").onClick(TextActions.suggestCommand("/acc list")),
+					TextColors.GOLD, Text.builder("acc list").onClick(TextActions.suggestCommand("/acc list")),
 					TextColors.DARK_GRAY, " - ",
 					TextColors.DARK_GREEN, CommandList.HELP_TEXT
 			));
@@ -144,8 +144,8 @@ public class CommandAnnounce implements CommandExecutor {
 
 		if (hasMod || src.hasPermission(Permissions.COMMAND_MODE)) {
 			helpText.add(Text.of(
-					TextColors.AQUA, Text.builder("acc mode").onClick(TextActions.suggestCommand("/acc mode <value>")),
-					TextColors.GOLD, " <random|sequential>",
+					TextColors.GOLD, Text.builder("acc mode").onClick(TextActions.suggestCommand("/acc mode <value>")),
+					TextColors.YELLOW, " <random|sequential>",
 					TextColors.DARK_GRAY, " - ",
 					TextColors.DARK_GREEN, CommandMode.HELP_TEXT
 			));
@@ -154,8 +154,8 @@ public class CommandAnnounce implements CommandExecutor {
 
 		if (hasMod || src.hasPermission(Permissions.COMMAND_PREFIX)) {
 			helpText.add(Text.of(
-					TextColors.AQUA, Text.builder("acc prefix").onClick(TextActions.suggestCommand("/acc prefix <value>")),
-					TextColors.GOLD, " <value>",
+					TextColors.GOLD, Text.builder("acc prefix").onClick(TextActions.suggestCommand("/acc prefix <value>")),
+					TextColors.YELLOW, " <value>",
 					TextColors.DARK_GRAY, " - ",
 					TextColors.DARK_GREEN, CommandPrefix.HELP_TEXT
 			));
@@ -164,8 +164,13 @@ public class CommandAnnounce implements CommandExecutor {
 
 		if (hasAdmin || src.hasPermission(Permissions.COMMAND_ENABLE)) {
 			helpText.add(Text.of(
-					TextColors.AQUA, Text.builder("acc enable").onClick(TextActions.suggestCommand("/acc enable false")),
-					TextColors.GRAY, " [true|false]",
+					TextColors.GOLD, Text.builder("acc enable").onClick(TextActions.suggestCommand("/acc enable")),
+					TextColors.DARK_GRAY, " - ",
+					TextColors.DARK_GREEN, CommandEnable.HELP_TEXT
+			));
+
+			helpText.add(Text.of(
+					TextColors.GOLD, Text.builder("acc disable").onClick(TextActions.suggestCommand("/acc disable")),
 					TextColors.DARK_GRAY, " - ",
 					TextColors.DARK_GREEN, CommandEnable.HELP_TEXT
 			));
@@ -174,7 +179,7 @@ public class CommandAnnounce implements CommandExecutor {
 
 		if (hasAdmin || src.hasPermission(Permissions.COMMAND_RELOAD)) {
 			helpText.add(Text.of(
-					TextColors.AQUA, Text.builder("acc reload").onClick(TextActions.suggestCommand("/acc reload")),
+					TextColors.GOLD, Text.builder("acc reload").onClick(TextActions.suggestCommand("/acc reload")),
 					TextColors.DARK_GRAY, " - ",
 					TextColors.DARK_GREEN, CommandReload.HELP_TEXT
 			));
@@ -183,7 +188,7 @@ public class CommandAnnounce implements CommandExecutor {
 
 		if (hasAdmin || src.hasPermission(Permissions.COMMAND_VERSION)) {
 			helpText.add(Text.of(
-					TextColors.AQUA, Text.builder("acc version").onClick(TextActions.suggestCommand("/acc version")),
+					TextColors.GOLD, Text.builder("acc version").onClick(TextActions.suggestCommand("/acc version")),
 					TextColors.DARK_GRAY, " - ",
 					TextColors.DARK_GREEN, CommandVersion.HELP_TEXT
 			));
