@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import me.subtypezero.announcer.Announcer;
 import me.subtypezero.announcer.PluginInfo;
+import me.subtypezero.announcer.command.admin.CommandDisable;
 import me.subtypezero.announcer.command.admin.CommandEnable;
 import me.subtypezero.announcer.command.admin.CommandReload;
 import me.subtypezero.announcer.command.admin.CommandVersion;
@@ -65,6 +66,7 @@ public class CommandAnnounce implements CommandExecutor {
 		CommandMode.register();
 		CommandPrefix.register();
 		CommandEnable.register();
+		CommandDisable.register();
 		CommandReload.register();
 		CommandVersion.register();
 	}
