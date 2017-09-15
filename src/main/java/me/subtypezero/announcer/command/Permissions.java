@@ -13,7 +13,7 @@ public class Permissions {
 	public static final String COMMAND_SAY = "announcer.say"; // Allows users to broadcast a custom message once
 	public static final String COMMAND_INTERVAL = "announcer.interval"; // Allows users to change the announcement interval
 	public static final String COMMAND_LIST = "announcer.list"; // Allows users to view the list of announcements
-	public static final String COMMAND_RANDOM = "announcer.random"; // Allows users to change the announcement mode (random or sequential)
+	public static final String COMMAND_MODE = "announcer.mode"; // Allows users to toggle the announcement mode (random or sequential)
 	public static final String COMMAND_PREFIX = "announcer.prefix"; // Allows users to change the announcement prefix
 
 	// Admin Permissions

@@ -62,7 +62,7 @@ public class CommandAnnounce implements CommandExecutor {
 		CommandSay.register();
 		CommandInterval.register();
 		CommandList.register();
-		CommandRandom.register();
+		CommandMode.register();
 		CommandPrefix.register();
 		CommandEnable.register();
 		CommandReload.register();
@@ -142,12 +142,12 @@ public class CommandAnnounce implements CommandExecutor {
 			hasPerms = true;
 		}
 
-		if (hasMod || src.hasPermission(Permissions.COMMAND_RANDOM)) {
+		if (hasMod || src.hasPermission(Permissions.COMMAND_MODE)) {
 			helpText.add(Text.of(
 					TextColors.AQUA, Text.builder("acc mode").onClick(TextActions.suggestCommand("/acc mode <value>")),
 					TextColors.GOLD, " <random|sequential>",
 					TextColors.DARK_GRAY, " - ",
-					TextColors.DARK_GREEN, CommandRandom.HELP_TEXT
+					TextColors.DARK_GREEN, CommandMode.HELP_TEXT
 			));
 			hasPerms = true;
 		}
@@ -192,8 +192,8 @@ public class CommandAnnounce implements CommandExecutor {
 
 		if (hasPerms) {
 			PaginationList.builder()
-					.title(Text.of(TextColors.AQUA, PluginInfo.NAME, " Help"))
-					.padding(Text.of(TextColors.AQUA, TextStyles.STRIKETHROUGH, "-"))
+					.title(Text.of(TextColors.RED, PluginInfo.NAME, " Help"))
+					.padding(Text.of(TextColors.RED, TextStyles.STRIKETHROUGH, "-"))
 					.contents(helpText)
 					.sendTo(src);
 		} else {

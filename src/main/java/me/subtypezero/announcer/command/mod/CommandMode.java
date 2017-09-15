@@ -7,41 +7,38 @@ import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
-import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
-public class CommandRandom implements CommandExecutor {
+public class CommandMode implements CommandExecutor {
 	private static final Announcer PLUGIN = Announcer.getInstance();
-	public static final Text HELP_TEXT = Text.of("change the announcement mode (random or sequential)");
+	public static final Text HELP_TEXT = Text.of("toggle the announcement mode");
 
 	private static CommandSpec commandSpec = CommandSpec.builder()
 			.permission(Permissions.ADMIN_PERM)
 			.permission(Permissions.MOD_PERM)
-			.permission(Permissions.COMMAND_RANDOM)
+			.permission(Permissions.COMMAND_MODE)
 			.description(HELP_TEXT)
-			.arguments(GenericArguments.bool(Text.of("random")))
-			.executor(new CommandRandom())
+			.executor(new CommandMode())
 			.build();
 
 	public static void register() {
 		try {
-			CommandAnnounce.addSubCommand(commandSpec, "random");
+			CommandAnnounce.addSubCommand(commandSpec, "mode");
 			PLUGIN.getGame().getCommandManager().register(PLUGIN, commandSpec);
-			PLUGIN.getLogger().debug("Registered command: CommandRandom");
+			PLUGIN.getLogger().debug("Registered command: CommandMode");
 		} catch (UnsupportedOperationException e) {
 			e.printStackTrace();
-			PLUGIN.getLogger().error("Failed to register command: CommandRandom");
+			PLUGIN.getLogger().error("Failed to register command: CommandMode");
 		}
 	}
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		boolean random = args.<Boolean>getOne("random").get();
-		PLUGIN.setRandom(random);
-		src.sendMessage(Text.of(TextColors.GREEN, "Announcement mode changed successfully!"));
+		PLUGIN.setRandom(!PLUGIN.isRandom());
+		src.sendMessage(Text.of(TextColors.GREEN, "Announcement mode changed to: ", TextColors.GOLD, PLUGIN.isRandom() ? "random" : "sequential"));
 		return CommandResult.success();
 	}
 }

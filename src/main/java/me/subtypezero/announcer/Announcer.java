@@ -2,6 +2,7 @@ package me.subtypezero.announcer;
 
 import com.google.inject.Inject;
 import me.subtypezero.announcer.command.CommandAnnounce;
+import me.subtypezero.announcer.command.Permissions;
 import me.subtypezero.announcer.config.ConfigManager;
 import me.subtypezero.announcer.config.type.AnnouncementConfig;
 import me.subtypezero.announcer.config.type.GlobalConfig;
@@ -15,7 +16,6 @@ import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GameConstructionEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
@@ -120,7 +120,7 @@ public class Announcer {
 			} else if (game.getServer().getOnlinePlayers().size() > 0) {
 				Text messageToSend = ChatColorHelper.replaceColorCodes(String.format("%s%s", getPrefix(), message));
 				for (Player player : game.getServer().getOnlinePlayers()) {
-					if (player.hasPermission("announcer.receiver")) {
+					if (player.hasPermission(Permissions.MESSAGE_RECEIVER)) {
 						player.sendMessage(messageToSend);
 					}
 				}
