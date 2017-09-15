@@ -9,43 +9,27 @@ import java.util.List;
 
 @ConfigSerializable
 public class AnnouncementConfig {
-	@Setting(value = "enabled", comment = "Whether announcements should be enabled or disabled.")
-	private boolean enabled = true;
-	@Setting(value = "random", comment = "Whether announcements should be random or sequential.")
-	private boolean random = false;
-	@Setting(value = "prefix", comment = "The prefix to display while broadcasting announcements.")
-	private String prefix = "&c[Announcement]";
-	@Setting(value = "interval", comment = "The time interval (in seconds) between announcements.")
-	private int interval = 60;
 	@Setting(value = "Messages", comment = "The list of announcements to broadcast")
 	private List<String> messages = new ArrayList<>(Arrays.asList(
-			"Use /announce for information about configuring this plugin.",
-			"Created by Deckerz",
-			"Maintained by ThunderGemios10",
-			"Ported to Sponge by SubtypeZero"));
+			"Use /acc for information about configuring this plugin.",
+			"Created by Deckerz, ported to Sponge by SubtypeZero"));
+	@Setting(value = "interval", comment = "The time interval (in seconds) between announcements.")
+	private int interval = 60;
+	@Setting(value = "prefix", comment = "The prefix to display while broadcasting announcements.")
+	private String prefix = "&8[&cInfo&8]&6 ";
+	@Setting(value = "random", comment = "Whether announcements should be random or sequential.")
+	private boolean random = false;
+	@Setting(value = "enabled", comment = "Whether announcements should be enabled or disabled.")
+	private boolean enabled = true;
 
-	public boolean isEnabled() {
-		return enabled;
+	public List<String> getMessages() {
+		return messages;
 	}
 
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	public boolean isRandom() {
-		return random;
-	}
-
-	public void setRandom(boolean random) {
-		this.random = random;
-	}
-
-	public String getPrefix() {
-		return prefix;
-	}
-
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
+	public void setMessages(List<String> messages) {
+		if (messages != null) {
+			this.messages = messages;
+		}
 	}
 
 	public int getInterval() {
@@ -58,13 +42,27 @@ public class AnnouncementConfig {
 		}
 	}
 
-	public List<String> getMessages() {
-		return messages;
+	public String getPrefix() {
+		return prefix;
 	}
 
-	public void setMessages(List<String> messages) {
-		if (messages != null) {
-			this.messages = messages;
-		}
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
+
+	public boolean isRandom() {
+		return random;
+	}
+
+	public void setRandom(boolean random) {
+		this.random = random;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 }

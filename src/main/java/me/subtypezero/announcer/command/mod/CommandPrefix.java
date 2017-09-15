@@ -22,7 +22,7 @@ public class CommandPrefix implements CommandExecutor {
 			.permission(Permissions.MOD_PERM)
 			.permission(Permissions.COMMAND_PREFIX)
 			.description(HELP_TEXT)
-			.arguments(GenericArguments.string(Text.of("value")))
+			.arguments(GenericArguments.remainingJoinedStrings(Text.of("value")))
 			.executor(new CommandPrefix())
 			.build();
 

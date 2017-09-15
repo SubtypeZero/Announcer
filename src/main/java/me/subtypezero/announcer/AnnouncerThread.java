@@ -13,13 +13,15 @@ public class AnnouncerThread extends Thread {
 
 	public void run() {
 		if (plugin.isAnnouncerEnabled()) {
+			int size = plugin.getMessages().size();
+
 			if (plugin.isRandom()) {
-				last = Math.abs(random.nextInt() % plugin.getAnnouncementCount());
-			} else if (++last >= plugin.getAnnouncementCount()) {
+				last = Math.abs(random.nextInt() % size);
+			} else if (++last >= size) {
 				last = 0;
 			}
 
-			if (last < plugin.getAnnouncementCount()) {
+			if (last < size) {
 				plugin.announce(last + 1);
 			}
 		}

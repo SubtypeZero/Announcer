@@ -20,12 +20,12 @@ public class CommandDisable implements CommandExecutor {
 			.permission(Permissions.ADMIN_PERM)
 			.permission(Permissions.COMMAND_ENABLE)
 			.description(HELP_TEXT)
-			.executor(new CommandEnable())
+			.executor(new CommandDisable())
 			.build();
 
 	public static void register() {
 		try {
-			CommandAnnounce.addSubCommand(commandSpec, "enable");
+			CommandAnnounce.addSubCommand(commandSpec, "disable");
 			PLUGIN.getGame().getCommandManager().register(PLUGIN, commandSpec);
 			PLUGIN.getLogger().debug("Registered command: CommandDisable");
 		} catch (UnsupportedOperationException e) {

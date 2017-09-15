@@ -40,8 +40,14 @@ public class CommandRemove implements CommandExecutor {
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		int index = args.<Integer>getOne("index").get();
-		PLUGIN.removeAnnouncement(index);
-		src.sendMessage(Text.of(TextColors.GREEN, "Announcement removed successfully!"));
+
+		if (index > 0 && index <= PLUGIN.getMessages().size()) {
+			PLUGIN.removeMessage(index - 1);
+			src.sendMessage(Text.of(TextColors.GREEN, "Announcement removed successfully!"));
+		} else {
+			src.sendMessage(Text.of(TextColors.RED, "Failed to remove announcement, index out of range!"));
+		}
+
 		return CommandResult.success();
 	}
 }

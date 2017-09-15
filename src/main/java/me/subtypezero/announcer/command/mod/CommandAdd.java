@@ -22,7 +22,7 @@ public class CommandAdd implements CommandExecutor {
 			.permission(Permissions.MOD_PERM)
 			.permission(Permissions.COMMAND_ADD)
 			.description(HELP_TEXT)
-			.arguments(GenericArguments.string(Text.of("message")))
+			.arguments(GenericArguments.remainingJoinedStrings(Text.of("message")))
 			.executor(new CommandAdd())
 			.build();
 

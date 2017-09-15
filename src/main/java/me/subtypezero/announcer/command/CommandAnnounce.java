@@ -135,6 +135,16 @@ public class CommandAnnounce implements CommandExecutor {
 			hasPerms = true;
 		}
 
+		if (hasMod || src.hasPermission(Permissions.COMMAND_PREFIX)) {
+			helpText.add(Text.of(
+					TextColors.GOLD, Text.builder("acc prefix").onClick(TextActions.suggestCommand("/acc prefix <value>")),
+					TextColors.YELLOW, " <value>",
+					TextColors.DARK_GRAY, " - ",
+					TextColors.DARK_GREEN, CommandPrefix.HELP_TEXT
+			));
+			hasPerms = true;
+		}
+
 		if (hasMod || src.hasPermission(Permissions.COMMAND_LIST)) {
 			helpText.add(Text.of(
 					TextColors.GOLD, Text.builder("acc list").onClick(TextActions.suggestCommand("/acc list")),
@@ -149,16 +159,6 @@ public class CommandAnnounce implements CommandExecutor {
 					TextColors.GOLD, Text.builder("acc mode").onClick(TextActions.suggestCommand("/acc mode")),
 					TextColors.DARK_GRAY, " - ",
 					TextColors.DARK_GREEN, CommandMode.HELP_TEXT
-			));
-			hasPerms = true;
-		}
-
-		if (hasMod || src.hasPermission(Permissions.COMMAND_PREFIX)) {
-			helpText.add(Text.of(
-					TextColors.GOLD, Text.builder("acc prefix").onClick(TextActions.suggestCommand("/acc prefix <value>")),
-					TextColors.YELLOW, " <value>",
-					TextColors.DARK_GRAY, " - ",
-					TextColors.DARK_GREEN, CommandPrefix.HELP_TEXT
 			));
 			hasPerms = true;
 		}
@@ -199,7 +199,7 @@ public class CommandAnnounce implements CommandExecutor {
 		if (hasPerms) {
 			PaginationList.builder()
 					.title(Text.of(TextColors.RED, PluginInfo.NAME, " Help"))
-					.padding(Text.of(TextColors.RED, TextStyles.STRIKETHROUGH, "-"))
+					.padding(Text.of(TextColors.WHITE, TextStyles.STRIKETHROUGH, "-"))
 					.contents(helpText)
 					.sendTo(src);
 		} else {

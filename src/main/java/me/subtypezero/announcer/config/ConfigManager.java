@@ -21,7 +21,7 @@ public class ConfigManager {
 	public ConfigManager(ConfigurationLoader<CommentedConfigurationNode> loader) {
 		this.loader = loader;
 		try {
-			this.configMapper = ObjectMapper.forObject(PLUGIN.getConfig());
+			configMapper = ObjectMapper.forObject(PLUGIN.getConfig());
 		} catch (ObjectMappingException e) {
 			e.printStackTrace();
 		}
@@ -34,8 +34,8 @@ public class ConfigManager {
 	public void save() {
 		try {
 			SimpleCommentedConfigurationNode out = SimpleCommentedConfigurationNode.root();
-			this.configMapper.serialize(out);
-			this.loader.save(out);
+			configMapper.serialize(out);
+			loader.save(out);
 		} catch (ObjectMappingException | IOException e) {
 			LOGGER.error(String.format("Failed to save config.\r\n %s", e.getMessage()));
 		}
@@ -46,7 +46,7 @@ public class ConfigManager {
 	 */
 	public void load() {
 		try {
-			this.configMapper.populate(this.loader.load());
+			configMapper.populate(loader.load());
 		} catch (ObjectMappingException | IOException e) {
 			LOGGER.error(String.format("Failed to load config.\r\n %s", e.getMessage()));
 		}

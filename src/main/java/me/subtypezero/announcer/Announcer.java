@@ -23,6 +23,7 @@ import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.serializer.TextSerializers;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -57,7 +58,6 @@ public class Announcer {
 
 	@Listener
 	public void onPreInitialization(GamePreInitializationEvent event) {
-		configLoader = HoconConfigurationLoader.builder().setPath(configDir).build();
 		defaultConfig = new GlobalConfig();
 		configManager = new ConfigManager(configLoader);
 		config = defaultConfig.getAnnouncementConfig();
@@ -67,6 +67,7 @@ public class Announcer {
 	@Listener
 	public void onServerStart(GameStartedServerEvent event) {
 		instance = this;
+		registerTasks();
 		registerCommands();
 	}
 
@@ -77,7 +78,7 @@ public class Announcer {
 
 	public void reloadConfiguration() {
 		// Load Plugin Config
-		configManager.load();
+		configManager = new ConfigManager(configLoader);
 		// Reload Tasks
 		cancelTasks();
 		registerTasks();
@@ -92,7 +93,7 @@ public class Announcer {
 	}
 
 	private void registerTasks() {
-		if (getConfig().getAnnouncementConfig().isEnabled()) {
+		if (config.isEnabled()) {
 			Sponge.getScheduler().createTaskBuilder()
 					.name("announcer.message.broadcast")
 					.execute(new AnnouncerThread(this))
@@ -118,7 +119,7 @@ public class Announcer {
 			if (message.startsWith("/")) {
 				game.getCommandManager().process(game.getServer().getConsole(), message.substring(1));
 			} else if (game.getServer().getOnlinePlayers().size() > 0) {
-				Text messageToSend = ChatColorHelper.replaceColorCodes(String.format("%s%s", getPrefix(), message));
+				Text messageToSend = TextSerializers.FORMATTING_CODE.deserialize(String.format("%s%s", getPrefix(), message));
 				for (Player player : game.getServer().getOnlinePlayers()) {
 					if (player.hasPermission(Permissions.MESSAGE_RECEIVER)) {
 						player.sendMessage(messageToSend);
@@ -134,7 +135,7 @@ public class Announcer {
 
 	public void setPrefix(String prefix) {
 		config.setPrefix(prefix);
-		getConfigLoader().save();
+		configManager.save();
 	}
 
 	public int getInterval() {
@@ -143,9 +144,7 @@ public class Announcer {
 
 	public void setInterval(int interval) {
 		config.setInterval(interval);
-		getConfigLoader().save();
-
-		// Restart the task
+		configManager.save();
 		cancelTasks();
 		registerTasks();
 	}
@@ -154,28 +153,27 @@ public class Announcer {
 		List<String> messages = config.getMessages();
 		messages.add(message);
 		config.setMessages(messages);
-		getConfigLoader().save();
+		configManager.save();
 	}
 
-	public String getAnnouncement(int index) {
-		return config.getMessages().get(index - 1);
+	public String getMessage(int index) {
+		return config.getMessages().get(index);
 	}
 
-	public int getAnnouncementCount() {
-		return config.getMessages().size();
+	public List<String> getMessages() {
+		return config.getMessages();
 	}
 
-	public void clearAnnouncements() {
+	public void clearMessages() {
 		config.setMessages(new ArrayList<>());
-		getConfigLoader().save();
+		configManager.save();
 	}
 
-	public void removeAnnouncement(int index) {
+	public void removeMessage(int index) {
 		List<String> messages = config.getMessages();
-		messages.remove(index - 1);
+		messages.remove(index);
 		config.setMessages(messages);
 		configManager.save();
-		getConfigLoader().save();
 	}
 
 	public boolean isAnnouncerEnabled() {
@@ -183,14 +181,10 @@ public class Announcer {
 	}
 
 	public void setAnnouncerEnabled(boolean enabled) {
-		if (enabled != config.isEnabled()) {
-			cancelTasks();
-			if (enabled) {
-				registerTasks();
-			}
-			config.setEnabled(enabled);
-			getConfigLoader().save();
-		}
+		config.setEnabled(enabled);
+		configManager.save();
+		cancelTasks();
+		registerTasks();
 	}
 
 	public boolean isRandom() {
@@ -199,7 +193,7 @@ public class Announcer {
 
 	public void setRandom(boolean random) {
 		config.setRandom(random);
-		getConfigLoader().save();
+		configManager.save();
 	}
 
 	public static Announcer getInstance() {
@@ -218,7 +212,7 @@ public class Announcer {
 		return this.defaultConfig;
 	}
 
-	public ConfigManager getConfigLoader() {
+	public ConfigManager getConfigManager() {
 		return this.configManager;
 	}
 }
