@@ -144,8 +144,7 @@ public class CommandAnnounce implements CommandExecutor {
 
 		if (hasMod || src.hasPermission(Permissions.COMMAND_MODE)) {
 			helpText.add(Text.of(
-					TextColors.GOLD, Text.builder("acc mode").onClick(TextActions.suggestCommand("/acc mode <value>")),
-					TextColors.YELLOW, " <random|sequential>",
+					TextColors.GOLD, Text.builder("acc mode").onClick(TextActions.suggestCommand("/acc mode")),
 					TextColors.DARK_GRAY, " - ",
 					TextColors.DARK_GREEN, CommandMode.HELP_TEXT
 			));
