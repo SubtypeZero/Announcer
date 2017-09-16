@@ -41,7 +41,6 @@ public class CommandBroadcast implements CommandExecutor {
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		int index = args.<Integer>getOne("index").get();
 		PLUGIN.announce(index);
-		src.sendMessage(Text.of(TextColors.GREEN, "Announcement removed successfully!"));
 		return CommandResult.success();
 	}
 }

@@ -79,6 +79,7 @@ public class Announcer {
 	public void reloadConfiguration() {
 		// Load Plugin Config
 		configManager = new ConfigManager(configLoader);
+		config = defaultConfig.getAnnouncementConfig();
 		// Reload Tasks
 		cancelTasks();
 		registerTasks();
@@ -119,7 +120,7 @@ public class Announcer {
 			if (message.startsWith("/")) {
 				game.getCommandManager().process(game.getServer().getConsole(), message.substring(1));
 			} else if (game.getServer().getOnlinePlayers().size() > 0) {
-				Text messageToSend = TextSerializers.FORMATTING_CODE.deserialize(String.format("%s%s", getPrefix(), message));
+				Text messageToSend = toText(String.format("%s%s", getPrefix(), message));
 				for (Player player : game.getServer().getOnlinePlayers()) {
 					if (player.hasPermission(Permissions.MESSAGE_RECEIVER)) {
 						player.sendMessage(messageToSend);
@@ -127,6 +128,10 @@ public class Announcer {
 				}
 			}
 		}
+	}
+
+	private Text toText(String str) {
+		return TextSerializers.FORMATTING_CODE.deserialize(str);
 	}
 
 	public String getPrefix() {
